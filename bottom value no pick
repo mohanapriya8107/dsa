@@ -1,0 +1,35 @@
+//  bottom value no pick-dp++
+#include <stdio.h>
+int n,m;
+void findmax(int fsmax[2],int i,int m,int dp[][m]){
+    int max=dp[i][0],smax=-1;
+    for(int j=1;j<m;j++){
+        if(dp[i][j]>max){           //i/p 70 50 80 50
+            smax=max;               // 100 90 60 150
+            max=dp[i][j];          //  200 60 40 30
+        }else if(dp[i][j]>smax){    //o/p 430
+            smax=dp[i][j];
+        }
+    }fsmax[0]=max,fsmax[1]=smax;
+}
+int main(){
+    scanf("%d%d",&n,&m);
+    int arr[n][m],dp[n][m];
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            scanf("%d",&arr[i][j]);
+            if(i==0){
+                dp[i][j]=arr[i][j];
+            }
+        }
+    }
+   int fsmax[2];
+    for(int i=1;i<n;i++){
+        findmax(fsmax,i-1,m,dp);
+        for(int j=0;j<m;j++){
+            dp[i][j]=arr[i][j]+(dp[i-1][j]==fsmax[0]?fsmax[1]:fsmax[0]);
+        }
+    }
+    findmax(fsmax,n-1,m,dp);
+    printf("%d",fsmax[0]);
+}
